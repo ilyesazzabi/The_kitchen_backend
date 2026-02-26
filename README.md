@@ -1,121 +1,72 @@
-# The Kitchen — AI Restaurant Monitoring System
+# 🍴 The Kitchen — Backend
 
-> Système de surveillance IA en temps réel pour restaurant, avec détection de personnel, tracking client, et dashboard de performance.
+Pipeline de détection IA pour restaurant : tracking staff, identification par visage (ArcFace), analyse d'efficacité en temps réel.
 
----
-
-## 🏗️ Architecture
-
-```
-The_kitchen_camera_detection/
-│
-├── 🐍 backend/                 ← Ce dossier (Python)
-│   ├── video_to_dashboard.py   ← Pipeline de détection principal
-│   ├── ws_dashboard_server.py  ← Serveur WebSocket + API HTTP  
-│   └── ...                     ← Scripts utilitaires
-│
-└── ⚛️  frontend/               ← kitchen-sparkle-desk/ (React)
-    └── src/
-        ├── components/dashboard/
-        └── hooks/useWebSocketDashboard.ts
-```
-
----
-
-## 🚀 Démarrage rapide
-
-### Prérequis
-- Python 3.10+
-- CUDA (recommandé pour la détection temps réel)
-- Node.js 18+
-
-### 1. Backend
+## 🚀 Installation
 
 ```bash
-# Créer l'environnement virtuel
-python -m venv venv_new
-venv_new\Scripts\activate   # Windows
+# 1. Cloner le repo (avec Git LFS pour les modèles)
+git lfs install
+git clone https://github.com/ilyesazzabi/The_kitchen_backend.git
+cd The_kitchen_backend
 
-# Installer les dépendances
-pip install ultralytics deepface opencv-python websockets
+# 2. Créer un environnement virtuel
+python -m venv venv
+venv\Scripts\activate   # Windows
+# source venv/bin/activate  # Linux/Mac
 
-# Lancer l'analyse vidéo
-python video_to_dashboard.py --video chemin/vers/video.mp4
+# 3. Installer les dépendances
+pip install -r requirements.txt
+```
 
-# Ou en mode live (caméras RTSP)
+## ▶️ Démarrage
+
+```bash
+# Mode serveur (attend les commandes du dashboard)
+python video_to_dashboard.py
+
+# Analyser une vidéo
+python video_to_dashboard.py --video chemin/video.mp4
+
+# Caméras live (6 RTSP)
 python video_to_dashboard.py --live
+
+# Une seule caméra
 python video_to_dashboard.py --cam imou_cam1
 ```
 
-### 2. Frontend
+## 📡 Ports
 
-```bash
-cd kitchen-sparkle-desk
-npm install
-npm run dev
-# → http://localhost:5173
-```
+| Port | Service |
+|------|---------|
+| 8765 | WebSocket (données temps réel) |
+| 8766 | API HTTP (contrôle vidéo, parcourir fichiers) |
+| 8767 | Serveur de fichiers (vidéos) |
 
----
+## 🧠 Modèles inclus (Git LFS)
 
-## 📡 Ports & APIs
+| Modèle | Taille | Usage |
+|--------|--------|-------|
+| `yolov8x.pt` | 130 MB | Détection personnes (précis) |
+| `yolov8n.pt` | 6 MB | Détection personnes (rapide, mode live) |
+| `staff_detector_v8.pt` | 50 MB | Détection visuelle du staff |
+| `staff_classifier_yolo.pt` | 10 MB | Classification corps (identification) |
+| `face_db.pkl` | ~1 MB | Base de données visages (ArcFace) |
 
-| Port | Protocole | Usage |
-|------|-----------|-------|
-| **:8765** | WebSocket | Flux temps réel (métriques, alertes) |
-| **:8766** | HTTP | API : `/api/alert-frame`, `/api/serve-video`, `/api/videos` |
-| **:8767** | HTTP | Serveur de fichiers statiques |
-| **:5173** | HTTP | Dashboard React (dev) |
+## 🔗 Frontend
 
----
+Le dashboard React se connecte à `ws://localhost:8765`.
+→ [The-kitchen-Frontend](https://github.com/BramaSquare360/The-kitchen-Fronted)
 
-## 🔍 Fonctionnalités
+## 📂 Fichiers
 
-- **Détection personnes** : YOLOv8x (vidéo) / YOLOv8n (live)
-- **Identification staff** : ArcFace (deepface) + classificateur YOLO custom
-- **Tracking** : ByteTrack multi-caméra
-- **Métriques temps réel** :
-  - Score d'efficacité (vitesse × 30% + réactivité × 30% + couverture × 25% + temps debout × 15%)
-  - Score journalier cumulé (persistant toute la journée)
-  - Tables visitées, temps de réponse moyen
-- **Alertes automatiques** :
-  - Réactivité critique (> 6 min entre tables)
-  - Couverture faible (< 30% tables)
-  - Inactivité (> 3 min sans mouvement)
-  - Score bas (< 35/100 pendant 5 min)
-- **Preuve vidéo** : Screenshot au moment de l'alerte + clip vidéo seeké (±45s)
-
----
-
-## 📷 Caméras supportées
-
-Configuration RTSP dans `video_to_dashboard.py` :
-```python
-RTSP_STREAMS = {
-    "imou_cam1": "rtsp://...",
-    "imou_cam2": "rtsp://...",
-    # ...
-}
-```
-
----
-
-## ⚠️ Fichiers non inclus dans le dépôt
-
-Ces fichiers sont trop lourds ou sensibles pour git :
-- `*.pt` — Modèles YOLO entraînés (contacter pour accès)
-- `face_db/`, `x/`, `y/`, `z/` — Bases de données de visages (privées)
-- `venv_new/` — Environnement virtuel Python
-- `*.mp4`, `*.dav` — Vidéos de caméra
-
----
-
-## 🛠️ Scripts principaux
-
-| Script | Usage |
-|--------|-------|
-| `video_to_dashboard.py` | Pipeline principal (détection + métriques) |
-| `ws_dashboard_server.py` | Serveur WebSocket + HTTP |
-| `add_more_staff.py` | Ajouter un nouveau serveur à la face_db |
-| `auto_test_detection.py` | Tester la détection sur une vidéo |
-| `train_staff_classifier.py` | Réentraîner le classificateur |
+| Fichier | Rôle |
+|---------|------|
+| `video_to_dashboard.py` | Pipeline principal (vidéo/caméra → dashboard) |
+| `ws_dashboard_server.py` | Serveur WebSocket + API HTTP |
+| `pipeline_dashboard.py` | Pipeline unifié (alternative) |
+| `staff_tracker_pro.py` | Tracking staff avec ByteTrack |
+| `detect_staff.py` | Détection YOLO-World |
+| `camera_config.json` | Configuration par caméra |
+| `bytetrack_kitchen.yaml` | Config tracker |
+| `requirements.txt` | Dépendances Python |
