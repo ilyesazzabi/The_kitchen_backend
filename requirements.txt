@@ -1,0 +1,20 @@
+# ──────────────────────────────────────────────
+# The Kitchen — Dépendances Python backend
+# ──────────────────────────────────────────────
+# Installer avec : pip install -r requirements.txt
+
+# Détection & Vision
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# Reconnaissance faciale
+deepface>=0.0.90
+tensorflow>=2.12.0
+
+# Serveur WebSocket & HTTP
+websockets>=11.0
+
+# Utilitaires
+Pillow>=10.0.0
+scipy>=1.10.0

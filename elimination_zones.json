@@ -1,0 +1,20 @@
+{
+    "_comment": "Zones d'élimination par caméra. Format: [x1, y1, x2, y2] pixels (résolution native caméra).",
+    "IMOU-CAM3": [
+        [
+            0,
+            0,
+            200,
+            400
+        ]
+    ],
+    "IMOU_CAM3_2026-0": [
+        [
+            0,
+            0,
+            200,
+            400
+        ]
+    ],
+    "default": []
+}

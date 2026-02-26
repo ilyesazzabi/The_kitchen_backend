@@ -1,0 +1,19 @@
+# Custom ByteTrack configuration for THE KITCHEN
+# Optimized for crossing robustness in restaurant environment
+
+tracker_type: bytetrack
+
+# Detection thresholds
+track_high_thresh: 0.30     # Lower = more tracks kept during occlusion
+track_low_thresh:  0.05     # Very low — pick up even faint detections
+new_track_thresh:  0.60     # High = only create new track when confident (avoids ghost tracks)
+
+# CROSSING KEY PARAMETER:
+# track_buffer = frames to keep a "lost" track alive before discarding
+# At 20fps: 60 frames = 3s. Use high value to survive crossing occlusions.
+track_buffer: 90            # 90 frames (~4.5s at 20fps) — survive long crossings
+
+# IOU matching — CRITICAL for crossing behavior
+# Lower = more lenient during crossing (tracks that overlap less are still matched)
+match_thresh: 0.70          # Was 0.85 — now 0.70 so crossing tracks still match
+fuse_score: true            # Fuse detection confidence with IOU

@@ -1,0 +1,59 @@
+{
+    "_comment": "Configuration par source vidéo. La clé = nom du fichier (sans extension) ou nom de la caméra RTSP.",
+    "_instructions": "Ajustez face_threshold par caméra selon les résultats observés. Lancez en mode debug (touche D) pour voir les scores en temps réel.",
+    "default": {
+        "_comment": "Utilisé si aucune config spécifique trouvée",
+        "face_threshold": 0.45,
+        "face_crop_top_pct": 0.30,
+        "staff_v8_conf": 0.50,
+        "person_conf": 0.25,
+        "recover_dist_px": 120,
+        "name_memory_sec": 20,
+        "votes_to_lock": 3,
+        "face_check_interval": 3.0,
+        "body_check_interval": 1.5
+    },
+    "imou_cam1": {
+        "_comment": "Caméra 1 — conf 0.60 pour réduire faux positifs (4ème staff fantôme)",
+        "face_threshold": 0.45,
+        "face_crop_top_pct": 0.30,
+        "staff_v8_conf": 0.60,
+        "recover_dist_px": 120,
+        "name_memory_sec": 20
+    },
+    "imou_cam2": {
+        "face_threshold": 0.45,
+        "face_crop_top_pct": 0.28,
+        "staff_v8_conf": 0.50,
+        "recover_dist_px": 100,
+        "name_memory_sec": 20
+    },
+    "imou_cam3": {
+        "face_threshold": 0.45,
+        "face_crop_top_pct": 0.30,
+        "staff_v8_conf": 0.50,
+        "recover_dist_px": 120,
+        "name_memory_sec": 20
+    },
+    "imou_cam4": {
+        "face_threshold": 0.45,
+        "face_crop_top_pct": 0.30,
+        "staff_v8_conf": 0.45,
+        "recover_dist_px": 120,
+        "name_memory_sec": 20
+    },
+    "imou_cam5": {
+        "face_threshold": 0.45,
+        "face_crop_top_pct": 0.30,
+        "staff_v8_conf": 0.50,
+        "recover_dist_px": 120,
+        "name_memory_sec": 20
+    },
+    "imou_cam6": {
+        "face_threshold": 0.45,
+        "face_crop_top_pct": 0.30,
+        "staff_v8_conf": 0.50,
+        "recover_dist_px": 120,
+        "name_memory_sec": 20
+    }
+}
